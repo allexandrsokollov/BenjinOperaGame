@@ -18,11 +18,21 @@ public class Point {
         this.color = color;
     }
 
+    public static Point getPoint(int x, int y) {
+        return new Point(x, y, GameColor.getRandColor());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Point point)) return false;
-        return x == point.x && y == point.y;
+        return color.equals(((Point) o).getColor());
+    }
+
+    public boolean isFullyEquals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof  Point point)) return false;
+        return x == ((Point) o).getX() && y == ((Point) o).getY() && color.equals(((Point) o).getColor());
     }
 
     @Override
