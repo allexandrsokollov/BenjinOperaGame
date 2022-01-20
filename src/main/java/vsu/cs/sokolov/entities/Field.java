@@ -1,17 +1,23 @@
 package vsu.cs.sokolov.entities;
 
-import vsu.cs.sokolov.exceptions.FieldException;
 
 public class Field {
-    private final int DEFAULT_FIELD_SIZE = 15;
     private Point[][] points;
+    private static final int DEFAULT_FIELD_SIZE = 15;
 
-    public Field(Point[][] points) throws FieldException {
+    public Field() {
 
-        if (points.length != points[0].length) {
-            throw new FieldException("Field size should be as square");
+        this.points = new Point[DEFAULT_FIELD_SIZE][DEFAULT_FIELD_SIZE];
+
+        for (int i = 0; i < DEFAULT_FIELD_SIZE; i++) {
+            for (int j = 0; j < DEFAULT_FIELD_SIZE; j++) {
+                this.points[i][j] = new Point(Point.getPoint(i, j));
+            }
         }
-        this.points = points;
+    }
+
+    public static int getDefaultFieldSize() {
+        return DEFAULT_FIELD_SIZE;
     }
 
     public Point getPointOn(int column, int row) {

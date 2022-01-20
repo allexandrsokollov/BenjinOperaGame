@@ -3,24 +3,28 @@ package vsu.cs.sokolov.entities;
 import vsu.cs.sokolov.enums.GameColor;
 
 public class Game {
-    private Field field;
+    private final Field field;
     private final int FIELD_SIZE;
 
-    public Game(Field field) {
-        this.field = field;
+    public Game() {
+        this.field = new Field();
         this.FIELD_SIZE = field.getPoints().length;
     }
 
-    public void deletePoints() {
+    public boolean replacePoints() {
         boolean [][] pointsToDelete = findPointsInRowsToDelete();
+        boolean wasSomethingHappened = false;
 
         for (int i = 0; i < FIELD_SIZE; i++) {
             for (int j = 0; j < FIELD_SIZE; j++) {
                 if (pointsToDelete[i][j]) {
                     field.setPointOn(i, j, new Point());
+                    wasSomethingHappened =  true;
                 }
             }
         }
+
+        return wasSomethingHappened;
     }
 
     public Field getField() {
@@ -49,7 +53,7 @@ public class Game {
 
                 } else if (sequenceLengthRow >= MIN_ROW_SIZE) {
 
-                    for (int k = 1; k <= sequenceLengthRow; k++) {
+                    for (int k = 0; k < sequenceLengthRow; k++) {
                         indexesOfPointsToDel[i][j - k] = true;
                     }
                     currentColorRow = currentPointRow.getColor();
@@ -59,15 +63,20 @@ public class Game {
                     currentColorRow = currentPointRow.getColor();
                     sequenceLengthRow = 0;
                 }
+            }
+        }
+
+        for (int i = 0; i < FIELD_SIZE; i++) {
+            for (int j = 0; j < FIELD_SIZE; j++) {
 
                 currentPointCol = field.getPointOn(j, i);
 
                 if (currentColorCol.equals(currentPointCol.getColor())) {
                     sequenceLengthCol++;
 
-                } else if (sequenceLengthCol >= MIN_ROW_SIZE) {
+                } else if (sequenceLengthRow >= MIN_ROW_SIZE) {
 
-                    for (int k = 1; k <= sequenceLengthCol; k++) {
+                    for (int k = 0; k < sequenceLengthCol; k++) {
                         indexesOfPointsToDel[j][i - k] = true;
                     }
                     currentColorCol = currentPointCol.getColor();
@@ -77,7 +86,6 @@ public class Game {
                     currentColorCol = currentPointCol.getColor();
                     sequenceLengthCol = 0;
                 }
-
             }
         }
 
