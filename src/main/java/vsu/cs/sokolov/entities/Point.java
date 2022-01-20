@@ -18,6 +18,12 @@ public class Point {
         this.color = color;
     }
 
+    public Point(Point point) {
+        this.x = point.getX();
+        this.y = point.getY();
+        this.color = point.getColor();
+    }
+
     public static Point getPoint(int x, int y) {
         return new Point(x, y, GameColor.getRandColor());
     }
