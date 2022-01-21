@@ -5,24 +5,27 @@ import vsu.cs.sokolov.enums.GameColor;
 import java.util.Objects;
 
 public class Point {
-    private final int x;
-    private final int y;
+    private int column;
+    private int row;
     private final GameColor color;
 
-    public Point(int x, int y, GameColor color) {
-        this.x = x;
-        this.y = y;
+    public Point(int column, int row, GameColor color) {
+        this.column = column;
+        this.row = row;
         this.color = color;
     }
 
     public Point(Point point) {
-        this.x = point.getX();
-        this.y = point.getY();
+        this.column = point.getColumn();
+        this.row = point.getRow();
         this.color = point.getColor();
     }
 
     public static Point getPoint(int x, int y) {
         return new Point(x, y, GameColor.getRandColor());
+    }
+    public boolean isPointBeside(Point point) {
+        return Math.abs(this.column - point.getColumn()) == 1 || Math.abs(this.row - point.getRow()) == 1;
     }
 
     @Override
@@ -34,21 +37,28 @@ public class Point {
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, color);
+        return Objects.hash(column, row, color);
     }
 
     @Override
     public String toString() {
-        return "" + y;
+        return "" + row;
     }
 
-    public int getX() {
-        return x;
+    public int getColumn() {
+        return column;
     }
 
+    public void setColumn(int column) {
+        this.column = column;
+    }
 
-    public int getY() {
-        return y;
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getRow() {
+        return row;
     }
 
     public GameColor getColor() {

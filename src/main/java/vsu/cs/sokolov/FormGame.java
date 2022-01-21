@@ -1,15 +1,17 @@
 package vsu.cs.sokolov;
 
 import util.JTableUtils;
-import util.SwingUtils;
 import vsu.cs.sokolov.entities.Field;
 import vsu.cs.sokolov.entities.Game;
+import vsu.cs.sokolov.entities.Point;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class FormGame extends JFrame{
     private static final int DEFAULT_CELL_SIZE = 50;
@@ -21,6 +23,9 @@ public class FormGame extends JFrame{
     private JButton buttonStartNewGame;
     private JLabel labelScore;
     private JTable tableGame;
+
+    Point pointDrag;
+    Point pointDrop;
 
 
     public FormGame() {
@@ -70,6 +75,66 @@ public class FormGame extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 startNewGame();
+            }
+        });
+//        tableGame.addMouseListener(new MouseAdapter() {
+//            /**
+//             * {@inheritDoc}
+//             *
+//             * @param e
+//             * @since 1.6
+//             */
+//            @Override
+//            public void mouseDragged(MouseEvent e) {
+//                int rowDrag = tableGame.rowAtPoint(e.getPoint());
+//                int columnDrag = tableGame.columnAtPoint(e.getPoint());
+//                Point dragPoint = game.getField().getPointOn(rowDrag, columnDrag);
+//
+//                int rowDrop = tableGame.rowAtPoint(e);
+//                int columnDrop = tableGame.columnAtPoint(e.getPoint());
+//                Point dropPoint = game.getField().getPointOn(rowDrop, columnDrop);
+//
+//
+//                super.mouseDragged(e);
+//            }
+//        });
+
+        tableGame.addMouseListener(new MouseAdapter() {
+            /**
+             * {@inheritDoc}
+             *
+             * @param e
+             */
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                int rowDrag = tableGame.rowAtPoint(e.getPoint());
+                int columnDrag = tableGame.columnAtPoint(e.getPoint());
+                pointDrag = game.getField().getPointOn(rowDrag, columnDrag);
+
+                super.mouseClicked(e);
+            }
+        });
+
+        tableGame.addMouseListener(new MouseAdapter() {
+            /**
+             * {@inheritDoc}
+             *
+             * @param e
+             */
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (pointDrag != null ) {
+                    if (pointDrag.isPointBeside(pointDrop)) {
+
+                        int rowDrop = tableGame.rowAtPoint(e.getPoint());
+                        int columnDrop = tableGame.columnAtPoint(e.getPoint());
+                        pointDrop = game.getField().getPointOn(rowDrop, columnDrop);
+
+
+                        super.mouseReleased(e);
+                    }
+                }
             }
         });
     }

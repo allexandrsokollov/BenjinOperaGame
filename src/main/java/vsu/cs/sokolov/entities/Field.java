@@ -32,4 +32,5 @@ public class Field {
     public void setPointOn(int row, int column) {
         this.points[row][column] = Point.getPoint(row, column);
     }
+
 }
