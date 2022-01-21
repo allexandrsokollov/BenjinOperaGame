@@ -29,7 +29,7 @@ public class FormGame extends JFrame{
 
     private boolean wasItClicked = false;
 
-    private int time = 10;
+    private int time = 60;
     private final Timer timer = new Timer(1000, e -> {
         time--;
         this.labelTimeLeft.setText(String.valueOf(time));
@@ -42,9 +42,6 @@ public class FormGame extends JFrame{
         }
 
     });
-
-
-
 
     public FormGame() {
         this.setTitle("Beijing Opera");
@@ -153,6 +150,8 @@ public class FormGame extends JFrame{
 
                         if (game.getAmountOfNewPoints() <= 0) {
                             SwingUtils.showInfoMessageBox("You win");
+                            game = null;
+                            tableGame.repaint();
                         }
                         super.mouseReleased(e);
                     }
@@ -180,54 +179,42 @@ public class FormGame extends JFrame{
     }
 
     private void paintCell(int row, int column, Graphics2D graphics2D) {
+        int six = 6;
+        int three = 3;
         if (game != null) {
             switch (game.getField().getPointOn(column, row).getColor()) {
                 case RED -> {
                     graphics2D.setColor(Color.RED);
-                    graphics2D.fillRect(0, 0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
-                    graphics2D.drawRoundRect(0, 0,
-                            DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5, 5);
+                    graphics2D.fillRect(three, three, DEFAULT_CELL_SIZE - six, DEFAULT_CELL_SIZE - six);
                 }
 
                 case BLUE -> {
                     graphics2D.setColor(Color.BLUE);
-                    graphics2D.fillRect(0, 0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
-                    graphics2D.drawRoundRect(0, 0,
-                            DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5, 5);
+                    graphics2D.fillRect(three, three, DEFAULT_CELL_SIZE - six, DEFAULT_CELL_SIZE - six);
                 }
 
                 case ORANGE -> {
                     graphics2D.setColor(Color.ORANGE);
-                    graphics2D.fillRect(0, 0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
-                    graphics2D.drawRoundRect(0, 0,
-                            DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5, 5);
+                    graphics2D.fillRect(three, three, DEFAULT_CELL_SIZE - six, DEFAULT_CELL_SIZE - six);
                 }
                 case BLACK -> {
                     graphics2D.setColor(Color.BLACK);
-                    graphics2D.fillRect(0, 0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
-                    graphics2D.drawRoundRect(0, 0,
-                            DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5, 5);
+                    graphics2D.fillRect(three, three, DEFAULT_CELL_SIZE - six, DEFAULT_CELL_SIZE - six);
                 }
                 case PURPLE -> {
                     graphics2D.setColor(Color.MAGENTA);
-                    graphics2D.fillRect(0, 0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
-                    graphics2D.drawRoundRect(0, 0,
-                            DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5, 5);
+                    graphics2D.fillRect(three, three, DEFAULT_CELL_SIZE - six, DEFAULT_CELL_SIZE - six);
+
                 }
                 case YELLOW -> {
                     graphics2D.setColor(Color.YELLOW);
-                    graphics2D.fillRect(0, 0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
-                    graphics2D.drawRoundRect(0, 0,
-                            DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5, 5);
+                    graphics2D.fillRect(three, three, DEFAULT_CELL_SIZE - six, DEFAULT_CELL_SIZE - six);
                 }
-
 
             }
         } else {
             graphics2D.setColor(Color.WHITE);
-            graphics2D.fillRect(0, 0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
-            graphics2D.drawRoundRect(0, 0,
-                    DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5, 5);
+            graphics2D.fillRect(three, three, DEFAULT_CELL_SIZE - six, DEFAULT_CELL_SIZE - six);
         }
 
         updateField();
@@ -236,6 +223,7 @@ public class FormGame extends JFrame{
     private void updateField() {tableGame.repaint();}
 
     private void startNewGame() {
+        time = 60;
         timer.start();
         game = new Game((Integer) spinner1.getValue());
         labelScore.setText(String.valueOf(game.getScore()));

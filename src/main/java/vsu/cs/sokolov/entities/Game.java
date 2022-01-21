@@ -2,6 +2,7 @@ package vsu.cs.sokolov.entities;
 
 import vsu.cs.sokolov.enums.GameColor;
 
+
 public class Game {
     private final Field field;
     private int amountOfNewPoints;
@@ -144,7 +145,5 @@ public class Game {
             field.updatePointOn(dragRowIndex, dragColumnIndex, drag);
             field.updatePointOn(dropRowIndex, dropColumnIndex, drop);
         }
-
-
     }
 }
