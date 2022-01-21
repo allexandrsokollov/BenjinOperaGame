@@ -21,10 +21,7 @@ public class FormGame extends JFrame{
     private JButton buttonStartNewGame;
     private JLabel labelScore;
     private JTable tableGame;
-    private JSlider sliderLevel;
-    private JLabel labelLevel;
     private JSpinner spinner1;
-    private JButton buttonUpdate;
 
     private Point pointDrag;
     private Point pointDrop;
@@ -40,7 +37,7 @@ public class FormGame extends JFrame{
         this.setVisible(true);
         this.pack();
 
-        labelLevel.setText(String.valueOf(sliderLevel.getValue()));
+        spinner1.setValue(1);
 
         tableGame.setRowHeight(DEFAULT_CELL_SIZE);
         JTableUtils.initJTableForArray(tableGame, DEFAULT_CELL_SIZE,
@@ -51,6 +48,7 @@ public class FormGame extends JFrame{
                 DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE);
 
         startNewGame();
+        labelScore.setText(String.valueOf(game.getAmountOfNewPoints()));
 
         tableGame.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             final class DrawComponent extends Component {
@@ -94,6 +92,8 @@ public class FormGame extends JFrame{
             @Override
             public void mousePressed(MouseEvent e) {
 
+                game.setGameIsGoing(true);
+
                 if (pointDrag != null) {
                     wasItClicked = true;
                 } else {
@@ -128,6 +128,7 @@ public class FormGame extends JFrame{
                         pointDrag = null;
                         pointDrop = null;
                         updateField();
+                        labelScore.setText(String.valueOf(game.getAmountOfNewPoints()));
 
                         if (game.getAmountOfNewPoints() <= 0) {
                             SwingUtils.showInfoMessageBox("You win");
@@ -137,18 +138,8 @@ public class FormGame extends JFrame{
                 }
             }
         });
-        buttonUpdate.addActionListener(new ActionListener() {
-            /**
-             * Invoked when an action occurs.
-             *
-             * @param e the event to be processed
-             */
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateField();
-            }
-        });
-        sliderLevel.addComponentListener(new ComponentAdapter() {
+
+        spinner1.addComponentListener(new ComponentAdapter() {
             /**
              * Invoked when the component's size changes.
              *
@@ -156,22 +147,14 @@ public class FormGame extends JFrame{
              */
             @Override
             public void componentResized(ComponentEvent e) {
-                game.setLevel(sliderLevel.getValue());
-                labelLevel.setText(String.valueOf(game.getLevel()));
+                int value = (int) spinner1.getValue();
+
+                if (value < 1) {
+                   spinner1.setValue(1);
+                }
+
+                game.setLevel(value);
                 super.componentResized(e);
-            }
-        });
-        sliderLevel.addComponentListener(new ComponentAdapter() {
-            /**
-             * Invoked when the component's position changes.
-             *
-             * @param e
-             */
-            @Override
-            public void componentMoved(ComponentEvent e) {
-                game.setLevel(sliderLevel.getValue());
-                labelLevel.setText(String.valueOf(game.getLevel()));
-                super.componentMoved(e);
             }
         });
     }
@@ -226,11 +209,12 @@ public class FormGame extends JFrame{
     private void updateField() {tableGame.repaint();}
 
     private void startNewGame() {
-        game = new Game(sliderLevel.getValue());
+        game = new Game((Integer) spinner1.getValue());
+        labelScore.setText(String.valueOf(game.getAmountOfNewPoints()));
 
-        int amountOfReplacedPoints = 1;
+        int amountOfReplacedPoints = 100;
 
-        while (amountOfReplacedPoints > 0) {
+        while (amountOfReplacedPoints != 0) {
             amountOfReplacedPoints = game.replacePoints();
         }
         tableGame.repaint();

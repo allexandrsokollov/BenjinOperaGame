@@ -7,12 +7,14 @@ public class Game {
     private int level;
     private int amountOfNewPoints;
     private final int FIELD_SIZE;
+    private boolean gameIsGoing;
 
     public Game(int level) {
         this.field = new Field();
         this.FIELD_SIZE = field.getPoints().length;
         this.level = level;
-        this.amountOfNewPoints = level * 1;
+        this.amountOfNewPoints = level * 10;
+        this.gameIsGoing = false;
     }
 
     public int replacePoints() {
@@ -24,10 +26,13 @@ public class Game {
                 if (indexesToDel[i][j]) {
                     field.setPointOn(i, j);
                     amountOfReplacedPoints++;
+
                 }
             }
         }
-        amountOfNewPoints -= amountOfReplacedPoints;
+        if (gameIsGoing) {
+            amountOfNewPoints -= amountOfReplacedPoints;
+        }
 
         if (amountOfNewPoints < 0) {
             return -1;
@@ -36,9 +41,10 @@ public class Game {
         return amountOfReplacedPoints;
     }
 
-    public int getLevel() {
-        return level;
+    public void setGameIsGoing(boolean gameIsGoing) {
+        this.gameIsGoing = gameIsGoing;
     }
+
 
     public void setLevel(int level) {
         this.level = level;
@@ -85,6 +91,7 @@ public class Game {
                                 indexesToDel[j - k][i] = true;
                             }
                         }
+                        currentColorCol = currentPoint.getColor();
                     }
                 } else {
                     if (sequenceLengthCol >= MIN_ROW_SIZE) {
@@ -97,13 +104,15 @@ public class Game {
                         }
                     }
                     sequenceLengthCol = 1;
+                    currentColorCol = currentPoint.getColor();
                 }
-                currentColorCol = currentPoint.getColor();
 
                 if (i == FIELD_SIZE - 1 && j == FIELD_SIZE - 1 && !rowsHandling) {
-                   rowsHandling = true;
-                   i = 0;
-                   j = 0;
+                    rowsHandling = true;
+                    sequenceLengthCol = 1;
+                    currentColorCol = GameColor.BLACK;
+                    i = 0;
+                    j = 0;
                 }
             }
         }
@@ -135,4 +144,7 @@ public class Game {
 
     }
 
+    public int getLevel() {
+        return level;
+    }
 }
