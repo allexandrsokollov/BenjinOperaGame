@@ -5,6 +5,7 @@ import java.util.Random;
 public enum GameColor {
     RED, BLUE, YELLOW, PURPLE, ORANGE, BLACK;
 
+
     public static GameColor getRandColor() {
         Random random = new Random();
         int rand = random.nextInt(0, 4);
@@ -30,4 +31,6 @@ public enum GameColor {
             }
         }
     }
+
+
 }

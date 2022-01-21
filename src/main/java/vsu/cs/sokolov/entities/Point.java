@@ -5,12 +5,9 @@ import vsu.cs.sokolov.enums.GameColor;
 import java.util.Objects;
 
 public class Point {
-    private int x;
-    private int y;
-    private GameColor color;
-
-    public Point() {
-    }
+    private final int x;
+    private final int y;
+    private final GameColor color;
 
     public Point(int x, int y, GameColor color) {
         this.x = x;
@@ -31,14 +28,8 @@ public class Point {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Point point)) return false;
+        if (!(o instanceof Point)) return false;
         return color.equals(((Point) o).getColor());
-    }
-
-    public boolean isFullyEquals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof  Point point)) return false;
-        return x == ((Point) o).getX() && y == ((Point) o).getY() && color.equals(((Point) o).getColor());
     }
 
     @Override
@@ -46,27 +37,21 @@ public class Point {
         return Objects.hash(x, y, color);
     }
 
+    @Override
+    public String toString() {
+        return "" + y;
+    }
+
     public int getX() {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
 
     public int getY() {
         return y;
     }
 
-    public void setY(int y) {
-        this.y = y;
-    }
-
     public GameColor getColor() {
         return color;
-    }
-
-    public void setColor(GameColor color) {
-        this.color = color;
     }
 }

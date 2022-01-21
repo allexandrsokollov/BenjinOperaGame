@@ -18,7 +18,7 @@ public class Game {
         for (int i = 0; i < FIELD_SIZE; i++) {
             for (int j = 0; j < FIELD_SIZE; j++) {
                 if (pointsToDelete[i][j]) {
-                    field.setPointOn(i, j, new Point());
+                    field.setPointOn(i, j);
                     wasSomethingHappened =  true;
                 }
             }
@@ -32,63 +32,38 @@ public class Game {
     }
 
     private boolean[][] findPointsInRowsToDelete() {
-        int sequenceLengthRow = 0;
-        int sequenceLengthCol = 0;
+        int sequenceLengthCol;
         boolean[][] indexesOfPointsToDel = new boolean[field.getPoints().length][field.getPoints()[0].length];
 
-        GameColor currentColorRow = GameColor.BLACK;
-        Point currentPointRow;
-
-        GameColor currentColorCol = GameColor.BLACK;
-        Point currentPointCol;
+        GameColor currentColorCol;
         int MIN_ROW_SIZE = 3;
 
         for (int i = 0; i < FIELD_SIZE; i++) {
+            currentColorCol = GameColor.BLACK;
+            sequenceLengthCol = 1;
+
             for (int j = 0; j < FIELD_SIZE; j++) {
+                Point currentPoint = field.getPointOn(i, j);
 
-                currentPointRow = field.getPointOn(i, j);
-
-                if (currentColorRow.equals(currentPointRow.getColor())) {
-                    sequenceLengthRow++;
-
-                } else if (sequenceLengthRow >= MIN_ROW_SIZE) {
-
-                    for (int k = 0; k < sequenceLengthRow; k++) {
-                        indexesOfPointsToDel[i][j - k] = true;
-                    }
-                    currentColorRow = currentPointRow.getColor();
-                    sequenceLengthRow = 0;
-
-                } else {
-                    currentColorRow = currentPointRow.getColor();
-                    sequenceLengthRow = 0;
-                }
-            }
-        }
-
-        for (int i = 0; i < FIELD_SIZE; i++) {
-            for (int j = 0; j < FIELD_SIZE; j++) {
-
-                currentPointCol = field.getPointOn(j, i);
-
-                if (currentColorCol.equals(currentPointCol.getColor())) {
+                if (currentColorCol.equals(currentPoint.getColor())) {
                     sequenceLengthCol++;
 
-                } else if (sequenceLengthRow >= MIN_ROW_SIZE) {
-
-                    for (int k = 0; k < sequenceLengthCol; k++) {
-                        indexesOfPointsToDel[j][i - k] = true;
+                    if (j == FIELD_SIZE - 1) {
+                        for (int k = 1; k <= sequenceLengthCol; k++) {
+                            indexesOfPointsToDel[i][j - k] = true;
+                        }
                     }
-                    currentColorCol = currentPointCol.getColor();
-                    sequenceLengthCol = 0;
-
                 } else {
-                    currentColorCol = currentPointCol.getColor();
-                    sequenceLengthCol = 0;
+                    if (sequenceLengthCol >= MIN_ROW_SIZE) {
+                        for (int k = 1; k <= sequenceLengthCol; k++) {
+                            indexesOfPointsToDel[i][j - k] = true;
+                        }
+                    }
+                    sequenceLengthCol = 1;
                 }
+                currentColorCol = currentPoint.getColor();
             }
         }
-
 
         return indexesOfPointsToDel;
     }

@@ -36,6 +36,8 @@ public class FormGame extends JFrame{
             if (!game.replacePoints()) {
                 stillNotReady = false;
             }
+
+            tableGame.repaint();
         }
 
         tableGame.setRowHeight(DEFAULT_CELL_SIZE);
@@ -109,6 +111,7 @@ public class FormGame extends JFrame{
                 graphics2D.drawRoundRect(0,0,
                         DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5 , 5);
             }
+
 
         }
 
