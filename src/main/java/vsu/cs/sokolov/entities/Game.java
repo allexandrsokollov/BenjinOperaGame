@@ -4,15 +4,15 @@ import vsu.cs.sokolov.enums.GameColor;
 
 public class Game {
     private final Field field;
-    private int level;
     private int amountOfNewPoints;
+    private int score;
     private final int FIELD_SIZE;
     private boolean gameIsGoing;
 
     public Game(int level) {
         this.field = new Field();
         this.FIELD_SIZE = field.getPoints().length;
-        this.level = level;
+        this.score = 0;
         this.amountOfNewPoints = level * 10;
         this.gameIsGoing = false;
     }
@@ -32,6 +32,7 @@ public class Game {
         }
         if (gameIsGoing) {
             amountOfNewPoints -= amountOfReplacedPoints;
+            score += amountOfReplacedPoints;
         }
 
         if (amountOfNewPoints < 0) {
@@ -41,13 +42,16 @@ public class Game {
         return amountOfReplacedPoints;
     }
 
+    public int getScore() {
+        return score;
+    }
+
     public void setGameIsGoing(boolean gameIsGoing) {
         this.gameIsGoing = gameIsGoing;
     }
 
 
     public void setLevel(int level) {
-        this.level = level;
         this.amountOfNewPoints = level * 100;
     }
 
@@ -142,9 +146,5 @@ public class Game {
         }
 
 
-    }
-
-    public int getLevel() {
-        return level;
     }
 }

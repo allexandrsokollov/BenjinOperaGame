@@ -55,6 +55,10 @@ public class FormGame extends JFrame{
 
         spinner1.setValue(1);
 
+        Options.setVisible(true);
+
+        labelTimeLeft.setText(String.valueOf(time));
+
         tableGame.setRowHeight(DEFAULT_CELL_SIZE);
         JTableUtils.initJTableForArray(tableGame, DEFAULT_CELL_SIZE,
                 false, false, false, false);
@@ -64,7 +68,7 @@ public class FormGame extends JFrame{
                 DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE);
 
         if (game != null) {
-            labelScore.setText(String.valueOf(game.getAmountOfNewPoints()));
+            labelScore.setText(String.valueOf(game.getScore()));
         }
 
         tableGame.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
@@ -145,7 +149,7 @@ public class FormGame extends JFrame{
                         pointDrag = null;
                         pointDrop = null;
                         updateField();
-                        labelScore.setText(String.valueOf(game.getAmountOfNewPoints()));
+                        labelScore.setText(String.valueOf(game.getScore()));
 
                         if (game.getAmountOfNewPoints() <= 0) {
                             SwingUtils.showInfoMessageBox("You win");
@@ -160,7 +164,6 @@ public class FormGame extends JFrame{
             /**
              * Invoked when the component's size changes.
              *
-             * @param e
              */
             @Override
             public void componentResized(ComponentEvent e) {
@@ -235,7 +238,7 @@ public class FormGame extends JFrame{
     private void startNewGame() {
         timer.start();
         game = new Game((Integer) spinner1.getValue());
-        labelScore.setText(String.valueOf(game.getAmountOfNewPoints()));
+        labelScore.setText(String.valueOf(game.getScore()));
 
         int amountOfReplacedPoints = 100;
 

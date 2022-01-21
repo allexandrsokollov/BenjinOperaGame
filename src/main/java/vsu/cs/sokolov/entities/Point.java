@@ -49,21 +49,8 @@ public class Point {
         return columnIndex;
     }
 
-    public void setColumnIndex(int columnIndex) {
-        this.columnIndex = columnIndex;
-    }
-
     public void setColor(GameColor color) {
         this.color = color;
-    }
-
-    public void setColAndRowIndexes(int rowIndex, int columnIndex) {
-        this.columnIndex = columnIndex;
-        this.rowIndex = rowIndex;
-    }
-
-    public void setRowIndex(int rowIndex) {
-        this.rowIndex = rowIndex;
     }
 
     public int getRowIndex() {
