@@ -22,11 +22,27 @@ public class FormGame extends JFrame{
     private JLabel labelScore;
     private JTable tableGame;
     private JSpinner spinner1;
+    private JLabel labelTimeLeft;
 
     private Point pointDrag;
     private Point pointDrop;
 
     private boolean wasItClicked = false;
+
+    private int time = 10;
+    private final Timer timer = new Timer(1000, e -> {
+        time--;
+        this.labelTimeLeft.setText(String.valueOf(time));
+
+        if (time <= 0) {
+            SwingUtils.showInfoMessageBox("You have lose");
+            stopTimer();
+            game = null;
+            tableGame.repaint();
+        }
+
+    });
+
 
 
 
@@ -47,8 +63,9 @@ public class FormGame extends JFrame{
         JTableUtils.resizeJTable(tableGame, Field.getDefaultFieldSize(), Field.getDefaultFieldSize(),
                 DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE);
 
-        startNewGame();
-        labelScore.setText(String.valueOf(game.getAmountOfNewPoints()));
+        if (game != null) {
+            labelScore.setText(String.valueOf(game.getAmountOfNewPoints()));
+        }
 
         tableGame.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             final class DrawComponent extends Component {
@@ -160,47 +177,54 @@ public class FormGame extends JFrame{
     }
 
     private void paintCell(int row, int column, Graphics2D graphics2D) {
-        switch (game.getField().getPointOn(column, row).getColor()) {
-            case RED -> {
-                graphics2D.setColor(Color.RED);
-                graphics2D.fillRect(0,0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
-                graphics2D.drawRoundRect(0,0,
-                        DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5 , 5);
-            }
+        if (game != null) {
+            switch (game.getField().getPointOn(column, row).getColor()) {
+                case RED -> {
+                    graphics2D.setColor(Color.RED);
+                    graphics2D.fillRect(0, 0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
+                    graphics2D.drawRoundRect(0, 0,
+                            DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5, 5);
+                }
 
-            case BLUE -> {
-                graphics2D.setColor(Color.BLUE);
-                graphics2D.fillRect(0,0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
-                graphics2D.drawRoundRect(0,0,
-                        DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5 , 5);
-            }
+                case BLUE -> {
+                    graphics2D.setColor(Color.BLUE);
+                    graphics2D.fillRect(0, 0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
+                    graphics2D.drawRoundRect(0, 0,
+                            DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5, 5);
+                }
 
-            case ORANGE -> {
-                graphics2D.setColor(Color.ORANGE);
-                graphics2D.fillRect(0,0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
-                graphics2D.drawRoundRect(0,0,
-                        DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5 , 5);
-            }
-            case BLACK -> {
-                graphics2D.setColor(Color.BLACK);
-                graphics2D.fillRect(0,0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
-                graphics2D.drawRoundRect(0,0,
-                        DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5 , 5);
-            }
-            case PURPLE -> {
-                graphics2D.setColor(Color.MAGENTA);
-                graphics2D.fillRect(0,0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
-                graphics2D.drawRoundRect(0,0,
-                        DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5 , 5);
-            }
-            case YELLOW -> {
-                graphics2D.setColor(Color.YELLOW);
-                graphics2D.fillRect(0,0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
-                graphics2D.drawRoundRect(0,0,
-                        DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5 , 5);
-            }
+                case ORANGE -> {
+                    graphics2D.setColor(Color.ORANGE);
+                    graphics2D.fillRect(0, 0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
+                    graphics2D.drawRoundRect(0, 0,
+                            DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5, 5);
+                }
+                case BLACK -> {
+                    graphics2D.setColor(Color.BLACK);
+                    graphics2D.fillRect(0, 0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
+                    graphics2D.drawRoundRect(0, 0,
+                            DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5, 5);
+                }
+                case PURPLE -> {
+                    graphics2D.setColor(Color.MAGENTA);
+                    graphics2D.fillRect(0, 0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
+                    graphics2D.drawRoundRect(0, 0,
+                            DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5, 5);
+                }
+                case YELLOW -> {
+                    graphics2D.setColor(Color.YELLOW);
+                    graphics2D.fillRect(0, 0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
+                    graphics2D.drawRoundRect(0, 0,
+                            DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5, 5);
+                }
 
 
+            }
+        } else {
+            graphics2D.setColor(Color.WHITE);
+            graphics2D.fillRect(0, 0, DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5);
+            graphics2D.drawRoundRect(0, 0,
+                    DEFAULT_CELL_SIZE - 5, DEFAULT_CELL_SIZE - 5, 5, 5);
         }
 
         updateField();
@@ -209,6 +233,7 @@ public class FormGame extends JFrame{
     private void updateField() {tableGame.repaint();}
 
     private void startNewGame() {
+        timer.start();
         game = new Game((Integer) spinner1.getValue());
         labelScore.setText(String.valueOf(game.getAmountOfNewPoints()));
 
@@ -218,5 +243,9 @@ public class FormGame extends JFrame{
             amountOfReplacedPoints = game.replacePoints();
         }
         tableGame.repaint();
+    }
+
+    private void stopTimer() {
+        timer.stop();
     }
 }

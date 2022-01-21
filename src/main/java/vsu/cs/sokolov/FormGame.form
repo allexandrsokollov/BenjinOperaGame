@@ -67,7 +67,7 @@
               <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="55"/>
+              <text value="0"/>
             </properties>
           </component>
           <component id="ef3b" class="javax.swing.JLabel">
@@ -78,12 +78,12 @@
               <text value="Time left: "/>
             </properties>
           </component>
-          <component id="cd986" class="javax.swing.JLabel">
+          <component id="cd986" class="javax.swing.JLabel" binding="labelTimeLeft">
             <constraints>
               <grid row="1" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="60"/>
+              <text value=""/>
             </properties>
           </component>
           <hspacer id="b4ce1">
