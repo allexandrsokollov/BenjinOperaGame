@@ -4,27 +4,49 @@ import vsu.cs.sokolov.enums.GameColor;
 
 public class Game {
     private final Field field;
+    private int level;
+    private int amountOfNewPoints;
     private final int FIELD_SIZE;
 
-    public Game() {
+    public Game(int level) {
         this.field = new Field();
         this.FIELD_SIZE = field.getPoints().length;
+        this.level = level;
+        this.amountOfNewPoints = level * 1;
     }
 
-    public boolean replacePoints() {
+    public int replacePoints() {
         boolean[][] indexesToDel = findIndexesInFieldToDel();
-        boolean wasSomethingHappened = false;
+        int amountOfReplacedPoints = 0;
 
         for (int i = 0; i < FIELD_SIZE; i++) {
             for (int j = 0; j < FIELD_SIZE; j++) {
                 if (indexesToDel[i][j]) {
                     field.setPointOn(i, j);
-                    wasSomethingHappened =  true;
+                    amountOfReplacedPoints++;
                 }
             }
         }
+        amountOfNewPoints -= amountOfReplacedPoints;
 
-        return wasSomethingHappened;
+        if (amountOfNewPoints < 0) {
+            return -1;
+        }
+
+        return amountOfReplacedPoints;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+        this.amountOfNewPoints = level * 100;
+    }
+
+    public int getAmountOfNewPoints() {
+        return amountOfNewPoints;
     }
 
     public Field getField() {
@@ -89,29 +111,27 @@ public class Game {
         return indexesToDel;
     }
 
-    public boolean tryToSwitchPoints(Point pointDrag, Point pointDrop) {
-        int tempRowIndex = pointDrop.getRow();
-        int tempColumnIndex = pointDrop.getColumn();
+    public void tryToSwitchPoints(Point pointDrag, Point pointDrop) {
+        int dropRowIndex = pointDrop.getRowIndex();
+        int dropColumnIndex = pointDrop.getColumnIndex();
 
-        pointDrop.setColumn(pointDrag.getColumn());
-        pointDrop.setRow(pointDrag.getRow());
+        int dragRowIndex = pointDrag.getRowIndex();
+        int dragColumnIndex = pointDrag.getColumnIndex();
 
-        pointDrag.setRow(tempRowIndex);
-        pointDrag.setColumn(tempColumnIndex);
+        GameColor drag = field.getPointOn(dragRowIndex, dragColumnIndex).getColor();
+        GameColor drop = field.getPointOn(dropRowIndex, dropColumnIndex).getColor();
 
-        boolean wasPointsDeleted = replacePoints();
+        field.updatePointOn(dragRowIndex, dragColumnIndex, drop);
+        field.updatePointOn(dropRowIndex, dropColumnIndex,drag);
 
-        if (!wasPointsDeleted) {
-            pointDrag.setRow(pointDrop.getRow());
-            pointDrag.setColumn(pointDrop.getColumn());
 
-            pointDrop.setColumn(tempColumnIndex);
-            pointDrop.setRow(tempRowIndex);
+        int wasPointsDeleted = replacePoints();
 
-            return false;
-        } else {
-            return true;
+        if (wasPointsDeleted == 0) {
+            field.updatePointOn(dragRowIndex, dragColumnIndex, drag);
+            field.updatePointOn(dropRowIndex, dropColumnIndex, drop);
         }
+
 
     }
 

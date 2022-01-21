@@ -1,6 +1,7 @@
 package vsu.cs.sokolov;
 
 import util.JTableUtils;
+import util.SwingUtils;
 import vsu.cs.sokolov.entities.Field;
 import vsu.cs.sokolov.entities.Game;
 import vsu.cs.sokolov.entities.Point;
@@ -8,10 +9,7 @@ import vsu.cs.sokolov.entities.Point;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 public class FormGame extends JFrame{
     private static final int DEFAULT_CELL_SIZE = 50;
@@ -23,9 +21,16 @@ public class FormGame extends JFrame{
     private JButton buttonStartNewGame;
     private JLabel labelScore;
     private JTable tableGame;
+    private JSlider sliderLevel;
+    private JLabel labelLevel;
+    private JSpinner spinner1;
+    private JButton buttonUpdate;
 
-    Point pointDrag;
-    Point pointDrop;
+    private Point pointDrag;
+    private Point pointDrop;
+
+    private boolean wasItClicked = false;
+
 
 
     public FormGame() {
@@ -35,7 +40,7 @@ public class FormGame extends JFrame{
         this.setVisible(true);
         this.pack();
 
-        startNewGame();
+        labelLevel.setText(String.valueOf(sliderLevel.getValue()));
 
         tableGame.setRowHeight(DEFAULT_CELL_SIZE);
         JTableUtils.initJTableForArray(tableGame, DEFAULT_CELL_SIZE,
@@ -44,6 +49,8 @@ public class FormGame extends JFrame{
         tableGame.setEnabled(false);
         JTableUtils.resizeJTable(tableGame, Field.getDefaultFieldSize(), Field.getDefaultFieldSize(),
                 DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE);
+
+        startNewGame();
 
         tableGame.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             final class DrawComponent extends Component {
@@ -77,27 +84,6 @@ public class FormGame extends JFrame{
                 startNewGame();
             }
         });
-//        tableGame.addMouseListener(new MouseAdapter() {
-//            /**
-//             * {@inheritDoc}
-//             *
-//             * @param e
-//             * @since 1.6
-//             */
-//            @Override
-//            public void mouseDragged(MouseEvent e) {
-//                int rowDrag = tableGame.rowAtPoint(e.getPoint());
-//                int columnDrag = tableGame.columnAtPoint(e.getPoint());
-//                Point dragPoint = game.getField().getPointOn(rowDrag, columnDrag);
-//
-//                int rowDrop = tableGame.rowAtPoint(e);
-//                int columnDrop = tableGame.columnAtPoint(e.getPoint());
-//                Point dropPoint = game.getField().getPointOn(rowDrop, columnDrop);
-//
-//
-//                super.mouseDragged(e);
-//            }
-//        });
 
         tableGame.addMouseListener(new MouseAdapter() {
             /**
@@ -106,13 +92,17 @@ public class FormGame extends JFrame{
              * @param e
              */
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
 
-                int rowDrag = tableGame.rowAtPoint(e.getPoint());
-                int columnDrag = tableGame.columnAtPoint(e.getPoint());
-                pointDrag = game.getField().getPointOn(rowDrag, columnDrag);
+                if (pointDrag != null) {
+                    wasItClicked = true;
+                } else {
+                    int rowDrag = tableGame.rowAtPoint(e.getPoint());
+                    int columnDrag = tableGame.columnAtPoint(e.getPoint());
+                    pointDrag = game.getField().getPointOn(rowDrag, columnDrag);
 
-                super.mouseClicked(e);
+                    super.mouseClicked(e);
+                }
             }
         });
 
@@ -123,18 +113,65 @@ public class FormGame extends JFrame{
              * @param e
              */
             @Override
-            public void mouseReleased(MouseEvent e) {
-                if (pointDrag != null ) {
+            public void mousePressed(MouseEvent e) {
+                if (pointDrag != null && wasItClicked) {
+
+                    int rowDrop = tableGame.rowAtPoint(e.getPoint());
+                    int columnDrop = tableGame.columnAtPoint(e.getPoint());
+                    pointDrop = game.getField().getPointOn(rowDrop, columnDrop);
+
                     if (pointDrag.isPointBeside(pointDrop)) {
 
-                        int rowDrop = tableGame.rowAtPoint(e.getPoint());
-                        int columnDrop = tableGame.columnAtPoint(e.getPoint());
-                        pointDrop = game.getField().getPointOn(rowDrop, columnDrop);
+                        game.tryToSwitchPoints(pointDrag, pointDrop);
 
+                        wasItClicked = false;
+                        pointDrag = null;
+                        pointDrop = null;
+                        updateField();
 
+                        if (game.getAmountOfNewPoints() <= 0) {
+                            SwingUtils.showInfoMessageBox("You win");
+                        }
                         super.mouseReleased(e);
                     }
                 }
+            }
+        });
+        buttonUpdate.addActionListener(new ActionListener() {
+            /**
+             * Invoked when an action occurs.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateField();
+            }
+        });
+        sliderLevel.addComponentListener(new ComponentAdapter() {
+            /**
+             * Invoked when the component's size changes.
+             *
+             * @param e
+             */
+            @Override
+            public void componentResized(ComponentEvent e) {
+                game.setLevel(sliderLevel.getValue());
+                labelLevel.setText(String.valueOf(game.getLevel()));
+                super.componentResized(e);
+            }
+        });
+        sliderLevel.addComponentListener(new ComponentAdapter() {
+            /**
+             * Invoked when the component's position changes.
+             *
+             * @param e
+             */
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                game.setLevel(sliderLevel.getValue());
+                labelLevel.setText(String.valueOf(game.getLevel()));
+                super.componentMoved(e);
             }
         });
     }
@@ -189,14 +226,12 @@ public class FormGame extends JFrame{
     private void updateField() {tableGame.repaint();}
 
     private void startNewGame() {
-        game = new Game();
+        game = new Game(sliderLevel.getValue());
 
-        boolean stillNotReady = true;
+        int amountOfReplacedPoints = 1;
 
-        while (stillNotReady) {
-            if (!game.replacePoints()) {
-                stillNotReady = false;
-            }
+        while (amountOfReplacedPoints > 0) {
+            amountOfReplacedPoints = game.replacePoints();
         }
         tableGame.repaint();
     }

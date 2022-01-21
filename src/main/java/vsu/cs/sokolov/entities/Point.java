@@ -5,19 +5,19 @@ import vsu.cs.sokolov.enums.GameColor;
 import java.util.Objects;
 
 public class Point {
-    private int column;
-    private int row;
-    private final GameColor color;
+    private int columnIndex;
+    private int rowIndex;
+    private GameColor color;
 
     public Point(int column, int row, GameColor color) {
-        this.column = column;
-        this.row = row;
+        this.columnIndex = column;
+        this.rowIndex = row;
         this.color = color;
     }
 
     public Point(Point point) {
-        this.column = point.getColumn();
-        this.row = point.getRow();
+        this.columnIndex = point.getColumnIndex();
+        this.rowIndex = point.getRowIndex();
         this.color = point.getColor();
     }
 
@@ -25,7 +25,7 @@ public class Point {
         return new Point(x, y, GameColor.getRandColor());
     }
     public boolean isPointBeside(Point point) {
-        return Math.abs(this.column - point.getColumn()) == 1 || Math.abs(this.row - point.getRow()) == 1;
+        return Math.abs(this.columnIndex - point.getColumnIndex()) == 1 || Math.abs(this.rowIndex - point.getRowIndex()) == 1;
     }
 
     @Override
@@ -37,28 +37,37 @@ public class Point {
 
     @Override
     public int hashCode() {
-        return Objects.hash(column, row, color);
+        return Objects.hash(columnIndex, rowIndex, color);
     }
 
     @Override
     public String toString() {
-        return "" + row;
+        return "" + color;
     }
 
-    public int getColumn() {
-        return column;
+    public int getColumnIndex() {
+        return columnIndex;
     }
 
-    public void setColumn(int column) {
-        this.column = column;
+    public void setColumnIndex(int columnIndex) {
+        this.columnIndex = columnIndex;
     }
 
-    public void setRow(int row) {
-        this.row = row;
+    public void setColor(GameColor color) {
+        this.color = color;
     }
 
-    public int getRow() {
-        return row;
+    public void setColAndRowIndexes(int rowIndex, int columnIndex) {
+        this.columnIndex = columnIndex;
+        this.rowIndex = rowIndex;
+    }
+
+    public void setRowIndex(int rowIndex) {
+        this.rowIndex = rowIndex;
+    }
+
+    public int getRowIndex() {
+        return rowIndex;
     }
 
     public GameColor getColor() {

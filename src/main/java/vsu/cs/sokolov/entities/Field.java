@@ -1,6 +1,8 @@
 package vsu.cs.sokolov.entities;
 
 
+import vsu.cs.sokolov.enums.GameColor;
+
 public class Field {
     private final Point[][] points;
     private static final int DEFAULT_FIELD_SIZE = 15;
@@ -23,6 +25,10 @@ public class Field {
 
     public Point getPointOn(int row, int column) {
         return points[row][column];
+    }
+
+    public void updatePointOn(int rowIndex, int columnIndex, GameColor color) {
+        points[rowIndex][columnIndex].setColor(color);
     }
 
     public Point[][] getPoints() {
