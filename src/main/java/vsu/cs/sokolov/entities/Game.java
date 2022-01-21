@@ -12,12 +12,12 @@ public class Game {
     }
 
     public boolean replacePoints() {
-        boolean [][] pointsToDelete = findPointsInRowsToDelete();
+        boolean[][] indexesToDel = findIndexesInFieldToDel();
         boolean wasSomethingHappened = false;
 
         for (int i = 0; i < FIELD_SIZE; i++) {
             for (int j = 0; j < FIELD_SIZE; j++) {
-                if (pointsToDelete[i][j]) {
+                if (indexesToDel[i][j]) {
                     field.setPointOn(i, j);
                     wasSomethingHappened =  true;
                 }
@@ -31,41 +31,62 @@ public class Game {
         return field;
     }
 
-    private boolean[][] findPointsInRowsToDelete() {
+    private boolean[][] findIndexesInFieldToDel () {
         int sequenceLengthCol;
-        boolean[][] indexesOfPointsToDel = new boolean[field.getPoints().length][field.getPoints()[0].length];
+        boolean[][] indexesToDel = new boolean[FIELD_SIZE][FIELD_SIZE];
+        boolean flip = false;
 
         GameColor currentColorCol;
         int MIN_ROW_SIZE = 3;
+        Point currentPoint;
 
         for (int i = 0; i < FIELD_SIZE; i++) {
             currentColorCol = GameColor.BLACK;
             sequenceLengthCol = 1;
 
             for (int j = 0; j < FIELD_SIZE; j++) {
-                Point currentPoint = field.getPointOn(i, j);
+
+                if (flip) {
+                    currentPoint = field.getPointOn(i, j);
+                } else {
+                    currentPoint = field.getPointOn(j, i);
+                }
 
                 if (currentColorCol.equals(currentPoint.getColor())) {
                     sequenceLengthCol++;
 
                     if (j == FIELD_SIZE - 1) {
                         for (int k = 1; k <= sequenceLengthCol; k++) {
-                            indexesOfPointsToDel[i][j - k] = true;
+                            if (flip) {
+                                indexesToDel[i][j - k] = true;
+                            } else {
+                                indexesToDel[j - k][i] = true;
+                            }
                         }
                     }
                 } else {
                     if (sequenceLengthCol >= MIN_ROW_SIZE) {
                         for (int k = 1; k <= sequenceLengthCol; k++) {
-                            indexesOfPointsToDel[i][j - k] = true;
+                            if (flip) {
+                                indexesToDel[i][j - k] = true;
+                            } else {
+                                indexesToDel[j - k][i] = true;
+                            }
                         }
                     }
                     sequenceLengthCol = 1;
                 }
                 currentColorCol = currentPoint.getColor();
+
+                if (i == FIELD_SIZE - 1 && j == FIELD_SIZE - 1 && !flip) {
+                   flip = true;
+                   i = 0;
+                   j = 0;
+                }
             }
         }
 
-        return indexesOfPointsToDel;
+        return indexesToDel;
     }
 
 }

@@ -8,6 +8,8 @@ import vsu.cs.sokolov.entities.Game;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class FormGame extends JFrame{
     private static final int DEFAULT_CELL_SIZE = 50;
@@ -28,17 +30,7 @@ public class FormGame extends JFrame{
         this.setVisible(true);
         this.pack();
 
-        game = new Game();
-
-        boolean stillNotReady = true;
-
-        while (stillNotReady) {
-            if (!game.replacePoints()) {
-                stillNotReady = false;
-            }
-
-            tableGame.repaint();
-        }
+        startNewGame();
 
         tableGame.setRowHeight(DEFAULT_CELL_SIZE);
         JTableUtils.initJTableForArray(tableGame, DEFAULT_CELL_SIZE,
@@ -67,6 +59,17 @@ public class FormGame extends JFrame{
                 comp.row = row;
                 comp.column = column;
                 return comp;
+            }
+        });
+        buttonStartNewGame.addActionListener(new ActionListener() {
+            /**
+             * Invoked when an action occurs.
+             *
+             * @param e the event to be processed
+             */
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                startNewGame();
             }
         });
     }
@@ -119,4 +122,17 @@ public class FormGame extends JFrame{
     }
 
     private void updateField() {tableGame.repaint();}
+
+    private void startNewGame() {
+        game = new Game();
+
+        boolean stillNotReady = true;
+
+        while (stillNotReady) {
+            if (!game.replacePoints()) {
+                stillNotReady = false;
+            }
+        }
+        tableGame.repaint();
+    }
 }
