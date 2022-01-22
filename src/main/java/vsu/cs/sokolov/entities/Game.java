@@ -19,7 +19,7 @@ public class Game {
     }
 
     public int replacePoints() {
-        boolean[][] indexesToDel = findIndexesInFieldToDel();
+        Boolean[][] indexesToDel = findIndexesInFieldToDel();
         int amountOfReplacedPoints = 0;
 
         for (int i = 0; i < FIELD_SIZE; i++) {
@@ -64,9 +64,15 @@ public class Game {
         return field;
     }
 
-    private boolean[][] findIndexesInFieldToDel () {
+    private Boolean[][] findIndexesInFieldToDel () {
         int sequenceLengthCol;
-        boolean[][] indexesToDel = new boolean[FIELD_SIZE][FIELD_SIZE];
+        Boolean[][] indexesToDel = new Boolean[FIELD_SIZE][FIELD_SIZE];
+
+        for (int i = 0; i < FIELD_SIZE; i++) {
+            for (int j = 0; j < FIELD_SIZE; j++) {
+                indexesToDel[i][j] = Boolean.FALSE;
+            }
+        }
         boolean rowsHandling = false;
 
         GameColor currentColorCol;
@@ -123,37 +129,43 @@ public class Game {
             sequenceLengthCol = 1;
 
             for (int j = 0; j < FIELD_SIZE; j++) {
+
                 if (rowsHandling) {
                     currentPoint = field.getPointOn(i, j);
                 } else {
                     currentPoint = field.getPointOn(j, i);
                 }
 
-                if (currentColorCol.equals(currentPoint.getColor())) {
+                if (currentColorCol.equals(currentPoint.getColor()) && !currentPoint.getColor().equals(GameColor.BLACK)) {
                     sequenceLengthCol++;
-
-                    if (j == FIELD_SIZE - 1 && sequenceLengthCol >= MIN_ROW_SIZE) {
-                        if (sequenceLengthCol == 15) {
-                            sequenceLengthCol--;
-                        }
-                        findBoolPointsToDel(sequenceLengthCol, indexesToDel, i, j, rowsHandling);
-                        sequenceLengthCol = 1;
-                    }
-                    currentColorCol = currentPoint.getColor();
-                } else if (sequenceLengthCol >= MIN_ROW_SIZE) {
 
                     if (sequenceLengthCol == 15) {
                         sequenceLengthCol--;
                     }
-                    findBoolPointsToDel(sequenceLengthCol, indexesToDel, i, j, rowsHandling);
-                    sequenceLengthCol = 1;
-                    currentColorCol = currentPoint.getColor();
-                }
 
+                    if (j == FIELD_SIZE - 1) {
+
+                        if (sequenceLengthCol >= MIN_ROW_SIZE) {
+                            findBoolPointsToDel(sequenceLengthCol, indexesToDel, i, j, rowsHandling);
+                        }
+                        sequenceLengthCol = 1;
+                    }
+                } else {
+
+                    if (sequenceLengthCol == 15) {
+                        sequenceLengthCol--;
+                    }
+                    if (sequenceLengthCol >= MIN_ROW_SIZE) {
+                        findBoolPointsToDel(sequenceLengthCol, indexesToDel, i, j, rowsHandling);
+                    }
+                    sequenceLengthCol = 1;
+                }
+                currentColorCol = currentPoint.getColor();
 
 
                 if (!rowsHandling && i == FIELD_SIZE - 1 && j == FIELD_SIZE - 1) {
                     rowsHandling = true;
+                    currentColorCol = GameColor.BLACK;
                     i = 0;
                     j = 0;
                 }
@@ -164,15 +176,15 @@ public class Game {
         return indexesToDel;
     }
 
-    private void findBoolPointsToDel(int sequenceLengthCol, boolean[][] indexesToDel, int i, int j, boolean rowsHandling) {
+    private void findBoolPointsToDel(Integer sequenceLengthCol, Boolean[][] indexesToDel, int i, int j, boolean rowsHandling) {
         for (int k = 1; k <= sequenceLengthCol; k++) {
 
             if (rowsHandling) {
-                System.out.println(i + "  " + "  " + j + "  " + k);
-                indexesToDel[i][j - k] = true;
+                System.out.println(i + "  " + " J-> " + j + "  " + k);
+                indexesToDel[i][j - k] = Boolean.TRUE;
             } else {
-                System.out.println(i + "  " + "  " + j + "  " + k);
-                indexesToDel[j - k][i] = true;
+                System.out.println(j + " <-J " + "  " + i + "  " + k);
+                indexesToDel[j - k][i] = Boolean.TRUE;
             }
         }
     }

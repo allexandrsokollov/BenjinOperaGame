@@ -40,7 +40,7 @@ public class Field {
     }
 
     public void setDeletedPoint(int row, int column) {
-        this.points[row][column] = new Point(row, column, GameColor.DELETED);
+        this.points[row][column] = new Point(row, column, GameColor.BLACK);
     }
 
 }
