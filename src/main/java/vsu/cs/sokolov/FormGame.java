@@ -137,10 +137,10 @@ public class FormGame extends JFrame{
                     int rowDrop = tableGame.rowAtPoint(e.getPoint());
                     int columnDrop = tableGame.columnAtPoint(e.getPoint());
                     pointDrop = game.getField().getPointOn(rowDrop, columnDrop);
-
+                    updateField();
                     if (pointDrag.isPointBeside(pointDrop)) {
 
-                        game.tryToSwitchPoints(pointDrag, pointDrop);
+                        game.switchPoints(pointDrag, pointDrop);
 
                         wasItClicked = false;
                         pointDrag = null;
@@ -154,7 +154,11 @@ public class FormGame extends JFrame{
                             tableGame.repaint();
                         }
                         super.mouseReleased(e);
+                    } else {
+                        pointDrop = null;
                     }
+
+
                 }
             }
         });
@@ -201,8 +205,13 @@ public class FormGame extends JFrame{
 
         graphics2D.fillRect(3, 3, DEFAULT_CELL_SIZE - 6, DEFAULT_CELL_SIZE - 6);
 
-        if (pointDrag != null && pointDrag.getRowIndex() == column && pointDrag.getColumnIndex() == row) {
+        if (pointDrag != null && pointDrag.getRowIndex() == row && pointDrag.getColumnIndex() == column) {
             graphics2D.setColor(Color.BLACK);
+            graphics2D.fillOval(19, 19, 10, 10);
+        }
+
+        if (pointDrop != null && pointDrop.getRowIndex() == row && pointDrop.getColumnIndex() == column) {
+            graphics2D.setColor(Color.WHITE);
             graphics2D.fillOval(19, 19, 10, 10);
         }
 
@@ -217,6 +226,8 @@ public class FormGame extends JFrame{
         timer.start();
         game = new Game((Integer) spinner1.getValue());
         labelScore.setText(String.valueOf(game.getScore()));
+        pointDrop = null;
+        pointDrag = null;
 
         int amountOfReplacedPoints = 100;
 

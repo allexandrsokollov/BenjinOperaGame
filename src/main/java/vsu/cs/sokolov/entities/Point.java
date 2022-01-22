@@ -21,15 +21,20 @@ public class Point {
         this.color = point.getColor();
     }
 
-    public Point() {
-
-    }
-
     public static Point getPoint(int x, int y) {
         return new Point(x, y, GameColor.getRandColor());
     }
+
     public boolean isPointBeside(Point point) {
-        return Math.abs(this.columnIndex - point.getColumnIndex()) == 1 || Math.abs(this.rowIndex - point.getRowIndex()) == 1;
+
+        if (Math.abs(this.columnIndex - point.getColumnIndex()) == 1 ||
+                Math.abs(this.rowIndex - point.getRowIndex()) == 0) {
+            return true;
+
+        } else {
+            return Math.abs(this.columnIndex - point.getColumnIndex()) == 0 ||
+                    Math.abs(this.rowIndex - point.getRowIndex()) == 1;
+        }
     }
 
     @Override

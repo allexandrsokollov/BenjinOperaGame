@@ -35,10 +35,6 @@ public class Field {
         return points;
     }
 
-    public void setPointOn(int row, int column) {
-        this.points[row][column] = Point.getPoint(row, column);
-    }
-
     public void setDeletedPoint(int row, int column) {
         this.points[row][column] = new Point(row, column, GameColor.BLACK);
     }

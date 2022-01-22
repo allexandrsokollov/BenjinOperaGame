@@ -30,7 +30,7 @@
           </component>
           <component id="90da1" class="javax.swing.JSpinner" binding="spinner1" default-binding="true">
             <constraints>
-              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+              <grid row="0" column="1" row-span="2" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                 <minimum-size width="15" height="30"/>
                 <preferred-size width="15" height="30"/>
               </grid>
