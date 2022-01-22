@@ -210,11 +210,6 @@ public class FormGame extends JFrame{
             graphics2D.fillOval(19, 19, 10, 10);
         }
 
-        if (pointDrop != null && pointDrop.getRowIndex() == row && pointDrop.getColumnIndex() == column) {
-            graphics2D.setColor(Color.WHITE);
-            graphics2D.fillOval(19, 19, 10, 10);
-        }
-
         updateField();
     }
 
