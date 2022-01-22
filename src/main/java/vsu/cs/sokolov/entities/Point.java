@@ -9,7 +9,7 @@ public class Point {
     private int rowIndex;
     private GameColor color;
 
-    public Point(int column, int row, GameColor color) {
+    public Point(int row, int column, GameColor color) {
         this.columnIndex = column;
         this.rowIndex = row;
         this.color = color;
@@ -19,6 +19,10 @@ public class Point {
         this.columnIndex = point.getColumnIndex();
         this.rowIndex = point.getRowIndex();
         this.color = point.getColor();
+    }
+
+    public Point() {
+
     }
 
     public static Point getPoint(int x, int y) {

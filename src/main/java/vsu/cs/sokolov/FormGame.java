@@ -179,42 +179,29 @@ public class FormGame extends JFrame{
     }
 
     private void paintCell(int row, int column, Graphics2D graphics2D) {
-        int six = 6;
-        int three = 3;
         if (game != null) {
             switch (game.getField().getPointOn(column, row).getColor()) {
-                case RED -> {
-                    graphics2D.setColor(Color.RED);
-                    graphics2D.fillRect(three, three, DEFAULT_CELL_SIZE - six, DEFAULT_CELL_SIZE - six);
-                }
+                case RED -> graphics2D.setColor(Color.RED);
 
-                case BLUE -> {
-                    graphics2D.setColor(Color.BLUE);
-                    graphics2D.fillRect(three, three, DEFAULT_CELL_SIZE - six, DEFAULT_CELL_SIZE - six);
-                }
+                case BLUE -> graphics2D.setColor(Color.BLUE);
 
-                case ORANGE -> {
-                    graphics2D.setColor(Color.ORANGE);
-                    graphics2D.fillRect(three, three, DEFAULT_CELL_SIZE - six, DEFAULT_CELL_SIZE - six);
-                }
-                case BLACK -> {
-                    graphics2D.setColor(Color.BLACK);
-                    graphics2D.fillRect(three, three, DEFAULT_CELL_SIZE - six, DEFAULT_CELL_SIZE - six);
-                }
-                case PURPLE -> {
-                    graphics2D.setColor(Color.MAGENTA);
-                    graphics2D.fillRect(three, three, DEFAULT_CELL_SIZE - six, DEFAULT_CELL_SIZE - six);
+                case ORANGE -> graphics2D.setColor(Color.ORANGE);
 
-                }
-                case YELLOW -> {
-                    graphics2D.setColor(Color.YELLOW);
-                    graphics2D.fillRect(three, three, DEFAULT_CELL_SIZE - six, DEFAULT_CELL_SIZE - six);
-                }
+                case BLACK -> graphics2D.setColor(Color.BLACK);
 
+                case PURPLE -> graphics2D.setColor(Color.MAGENTA);
+
+                case YELLOW -> graphics2D.setColor(Color.YELLOW);
             }
         } else {
             graphics2D.setColor(Color.WHITE);
-            graphics2D.fillRect(three, three, DEFAULT_CELL_SIZE - six, DEFAULT_CELL_SIZE - six);
+        }
+
+        graphics2D.fillRect(3, 3, DEFAULT_CELL_SIZE - 6, DEFAULT_CELL_SIZE - 6);
+
+        if (pointDrag != null && pointDrag.getRowIndex() == column && pointDrag.getColumnIndex() == row) {
+            graphics2D.setColor(Color.BLACK);
+            graphics2D.fillOval(19, 19, 10, 10);
         }
 
         updateField();
@@ -223,6 +210,7 @@ public class FormGame extends JFrame{
     private void updateField() {tableGame.repaint();}
 
     private void startNewGame() {
+        labelTimeLeft.setText("60");
         time = 60;
         timer.start();
         game = new Game((Integer) spinner1.getValue());
