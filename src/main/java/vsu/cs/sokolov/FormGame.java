@@ -189,6 +189,8 @@ public class FormGame extends JFrame{
 
                 case BLACK -> graphics2D.setColor(Color.BLACK);
 
+                case DELETED -> graphics2D.setColor(Color.DARK_GRAY);
+
                 case PURPLE -> graphics2D.setColor(Color.MAGENTA);
 
                 case YELLOW -> graphics2D.setColor(Color.YELLOW);

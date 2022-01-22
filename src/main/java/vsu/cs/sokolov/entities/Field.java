@@ -39,8 +39,8 @@ public class Field {
         this.points[row][column] = Point.getPoint(row, column);
     }
 
-    public void setBlackPoint(int row, int column) {
-        this.points[row][column] = new Point(row, column, GameColor.BLACK);
+    public void setDeletedPoint(int row, int column) {
+        this.points[row][column] = new Point(row, column, GameColor.DELETED);
     }
 
 }

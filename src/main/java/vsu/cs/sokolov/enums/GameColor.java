@@ -3,7 +3,7 @@ package vsu.cs.sokolov.enums;
 import java.util.Random;
 
 public enum GameColor {
-    RED, BLUE, YELLOW, PURPLE, ORANGE, BLACK;
+    RED, BLUE, YELLOW, PURPLE, ORANGE, BLACK, DELETED;
 
 
     public static GameColor getRandColor() {
