@@ -27,12 +27,12 @@ public class Point {
 
     public boolean isPointBeside(Point point) {
 
-        if (Math.abs(this.columnIndex - point.getColumnIndex()) == 1 ||
+        if (Math.abs(this.columnIndex - point.getColumnIndex()) == 1 &&
                 Math.abs(this.rowIndex - point.getRowIndex()) == 0) {
             return true;
 
         } else {
-            return Math.abs(this.columnIndex - point.getColumnIndex()) == 0 ||
+            return Math.abs(this.columnIndex - point.getColumnIndex()) == 0 &&
                     Math.abs(this.rowIndex - point.getRowIndex()) == 1;
         }
     }

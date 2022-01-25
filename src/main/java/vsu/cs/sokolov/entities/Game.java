@@ -50,22 +50,34 @@ public class Game {
 
     public int dropPoints() {
         int amountOfDroppedElems = 0;
+//        for (int i = 0; i < FIELD_SIZE - 1; i++) {
+//            for (int j = 0; j < FIELD_SIZE; j++) {
+//
+//                if (field.getPointOn(j, i + 1).getColor().equals(GameColor.BLACK) &&
+//                    !field.getPointOn(j, i).getColor().equals(GameColor.BLACK)) {
+//
+//                    field.getPointOn(j, i + 1).setColor(field.getPointOn(j, i).getColor());
+//                    field.getPointOn(j, i).setColor(GameColor.BLACK);
+//                    amountOfDroppedElems++;
+//                }
+//            }
+//        }
+
         for (int i = 0; i < FIELD_SIZE - 1; i++) {
             for (int j = 0; j < FIELD_SIZE; j++) {
+                if (field.getPointOn(i + 1, j).getColor().equals(GameColor.BLACK) &&
+                !field.getPointOn(i, j).getColor().equals(GameColor.BLACK)) {
 
-                if (field.getPointOn(j, i + 1).getColor().equals(GameColor.BLACK) &&
-                    !field.getPointOn(j, i).getColor().equals(GameColor.BLACK)) {
-
-                    field.getPointOn(j, i + 1).setColor(field.getPointOn(j, i).getColor());
-                    field.getPointOn(j, i).setColor(GameColor.BLACK);
+                    field.getPointOn(i + 1, j).setColor(field.getPointOn(i, j).getColor());
+                    field.getPointOn(i, j).setColor(GameColor.BLACK);
                     amountOfDroppedElems++;
                 }
             }
         }
 
         for (int i = 0; i < FIELD_SIZE; i++) {
-            if (field.getPointOn(i, 0).getColor().equals(GameColor.BLACK)) {
-                field.getPointOn(i, 0).setColor(GameColor.getRandColor());
+            if (field.getPointOn(0, i).getColor().equals(GameColor.BLACK)) {
+                field.getPointOn(0, i).setColor(GameColor.getRandColor());
                 amountOfDroppedElems++;
             }
         }
@@ -156,10 +168,8 @@ public class Game {
 
             if (j - k >= 0) {
                 if (rowsHandling) {
-                    System.out.println(i + "  " + " J-> " + j + "  " + k);
                     indexesToDel[i][j - k] = Boolean.TRUE;
                 } else {
-                    System.out.println(j + " <-J " + "  " + i + "  " + k);
                     indexesToDel[j - k][i] = Boolean.TRUE;
                 }
             }
@@ -173,22 +183,23 @@ public class Game {
         int dragRowIndex = pointDrag.getRowIndex();
         int dragColumnIndex = pointDrag.getColumnIndex();
 
-        GameColor drag = field.getPointOn(dragColumnIndex,dragRowIndex ).getColor();
+        GameColor drag = field.getPointOn(dragRowIndex,dragColumnIndex ).getColor();
         GameColor drop = field.getPointOn(dropRowIndex, dropColumnIndex).getColor();
 
         field.updatePointOn(dragRowIndex, dragColumnIndex, drop);
-        field.updatePointOn(dropColumnIndex,dropRowIndex, drag);
+        field.updatePointOn(dropRowIndex,dropColumnIndex, drag);
 
 
         int wasPointsDeleted = replacePoints();
 
+        if (wasPointsDeleted == 0) {
+            field.updatePointOn(dragRowIndex,dragColumnIndex,  drag);
+            field.updatePointOn(dropRowIndex,dropColumnIndex,  drop);
+        }
         while (wasPointsDeleted > 0) {
             wasPointsDeleted = replacePoints();
         }
 
-        if (wasPointsDeleted == 0) {
-            field.updatePointOn(dragColumnIndex,dragRowIndex,  drag);
-            field.updatePointOn(dropColumnIndex,dropRowIndex,  drop);
-        }
+
     }
 }

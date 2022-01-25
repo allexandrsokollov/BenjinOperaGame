@@ -119,6 +119,8 @@ public class FormGame extends JFrame{
                     int columnDrag = tableGame.columnAtPoint(e.getPoint());
                     pointDrag = game.getField().getPointOn(rowDrag, columnDrag);
 
+                    System.out.println("drag " + pointDrag + "  row " + rowDrag + "  colmn " + columnDrag);
+
                     super.mouseClicked(e);
                 }
             }
@@ -137,6 +139,8 @@ public class FormGame extends JFrame{
                     int rowDrop = tableGame.rowAtPoint(e.getPoint());
                     int columnDrop = tableGame.columnAtPoint(e.getPoint());
                     pointDrop = game.getField().getPointOn(rowDrop, columnDrop);
+
+                    System.out.println("drop " + pointDrop + "  row " + rowDrop + "  colmn " + columnDrop);
                     updateField();
                     if (pointDrag.isPointBeside(pointDrop)) {
 
@@ -182,7 +186,7 @@ public class FormGame extends JFrame{
 
     private void paintCell(int row, int column, Graphics2D graphics2D) {
         if (game != null) {
-            switch (game.getField().getPointOn(column, row).getColor()) {
+            switch (game.getField().getPointOn(row, column).getColor()) {
                 case RED -> graphics2D.setColor(Color.RED);
 
                 case BLUE -> graphics2D.setColor(Color.BLUE);
