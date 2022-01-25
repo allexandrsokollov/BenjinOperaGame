@@ -1,6 +1,5 @@
 package vsu.cs.sokolov.entities;
 
-
 import vsu.cs.sokolov.enums.GameColor;
 
 public class Field {

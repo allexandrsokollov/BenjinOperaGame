@@ -40,7 +40,6 @@ public class FormGame extends JFrame{
             game = null;
             tableGame.repaint();
         }
-
     });
 
     public FormGame() {
@@ -219,7 +218,7 @@ public class FormGame extends JFrame{
 
     private void startNewGame() {
         labelTimeLeft.setText("60");
-        time = 60;
+        time = 60000;
         timer.start();
         game = new Game((Integer) spinner1.getValue());
         labelScore.setText(String.valueOf(game.getScore()));
