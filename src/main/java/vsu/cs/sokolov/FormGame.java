@@ -157,8 +157,6 @@ public class FormGame extends JFrame{
                     } else {
                         pointDrop = null;
                     }
-
-
                 }
             }
         });

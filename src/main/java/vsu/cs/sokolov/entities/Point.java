@@ -5,8 +5,8 @@ import vsu.cs.sokolov.enums.GameColor;
 import java.util.Objects;
 
 public class Point {
-    private int columnIndex;
-    private int rowIndex;
+    private final int columnIndex;
+    private final int rowIndex;
     private GameColor color;
 
     public Point(int row, int column, GameColor color) {

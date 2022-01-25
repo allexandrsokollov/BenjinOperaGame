@@ -2,7 +2,6 @@ package vsu.cs.sokolov.entities;
 
 import vsu.cs.sokolov.enums.GameColor;
 
-
 public class Game {
     private final Field field;
     private int amountOfNewPoints;
@@ -37,7 +36,6 @@ public class Game {
             droppedPoints = dropPoints();
         }
 
-
         if (gameIsGoing) {
             amountOfNewPoints -= amountOfReplacedPoints;
             score += amountOfReplacedPoints;
@@ -49,7 +47,6 @@ public class Game {
 
         return amountOfReplacedPoints;
     }
-
 
     public int dropPoints() {
         int amountOfDroppedElems = 0;
@@ -142,7 +139,6 @@ public class Game {
                 }
                 currentColorCol = currentPoint.getColor();
 
-
                 if (!rowsHandling && i == FIELD_SIZE - 1 && j == FIELD_SIZE - 1) {
                     rowsHandling = true;
                     currentColorCol = GameColor.BLACK;
@@ -151,7 +147,6 @@ public class Game {
                 }
             }
         }
-
 
         return indexesToDel;
     }
